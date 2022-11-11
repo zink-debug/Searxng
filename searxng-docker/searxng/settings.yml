@@ -1,0 +1,214 @@
+# see https://docs.searxng.org/admin/engines/settings.html#use-default-settings
+use_default_settings: true
+server:
+  # base_url is defined in the SEARXNG_BASE_URL environment variable, see .env and docker-compose.yml
+  secret_key: "ec1d74cfe2b052c4ca17ccf77c193bb567ade4c586e3171b4d5bfe3bbdd6dd7c"  # change this!
+  limiter: true  # can be disabled for a private instance
+  image_proxy: true
+  #under server file
+  method: "GET"
+
+outgoing:
+  # default timeout in seconds, can be override by engine
+  request_timeout: 10.0
+
+ui:
+  static_use_hash: true
+redis:
+  url: redis://redis:6379/0
+
+engines:
+  - name: brave
+    shortcut: brave
+    engine: xpath
+    paging: true
+    time_range_support: true
+    first_page_num: 0
+    time_range_url: "&tf={time_range_val}"
+    search_url: https://search.brave.com/search?q={query}&offset={pageno}&spellcheck=1{time_range}
+    url_xpath: //a[@class="result-header"]/@href
+    title_xpath: //span[@class="snippet-title"]
+    content_xpath: //p[1][@class="snippet-description"]
+    suggestion_xpath: //div[@class="text-gray h6"]/a
+    time_range_map:
+      day: 'pd'
+      week: 'pw'
+      month: 'pm'
+      year: 'py'
+    categories: [general, web]
+    disabled: false
+    headers:
+      Accept-Encoding: gzip, deflate
+    about:
+      website: https://brave.com/search/
+      wikidata_id: Q107355971
+      use_official_api: false
+      require_api_key: false
+      results: HTML
+    tokens: [ 'park' ]
+
+  - name: bing
+    engine: bing
+    shortcut: bi
+    disabled: false
+    tokens: [ 'park' ]
+
+  - name: duckduckgo
+    engine: duckduckgo
+    shortcut: ddg
+    tokens: [ 'park' ]
+    disabled: false
+
+  - name: google
+    engine: google
+    shortcut: go
+    # see https://docs.searxng.org/src/searx.engines.google.html#module-searx.engines.google
+    use_mobile_ui: false
+    # additional_tests:
+    #   android: *test_android
+    tokens: [ 'park' ]
+    disabled: false
+
+  - name: qwant
+    qwant_categ: web
+    engine: qwant
+    shortcut: qw
+    categories: [general, web]
+    disabled: false
+   # additional_tests:
+     # rosebud: *test_rosebud
+    tokens: [ 'park' ]
+
+  - name: bing images
+    engine: bing_images
+    shortcut: bii
+    disabled: false
+    tokens: [ 'park' ]
+
+  - name: bing news
+    engine: bing_news
+    shortcut: bin
+    disabled: false
+    tokens: [ 'park' ]
+
+  - name: bing videos
+    engine: bing_videos
+    shortcut: biv
+    disabled: false
+    tokens: [ 'park' ]
+    
+  - name: google images
+    engine: google_images
+    shortcut: goi
+    # additional_tests:
+    #   android: *test_android
+    #   dali:
+    #     matrix:
+    #       query: ['Dali Christ']
+    #       lang: ['en', 'de', 'fr', 'zh-CN']
+    #     result_container:
+    #       - ['one_title_contains', 'Salvador']
+    disabled: false
+    tokens: [ 'park' ]
+ 
+  - name: google news
+    engine: google_news
+    shortcut: gon
+    # additional_tests:
+    #   android: *test_android
+    disabled: false
+    tokens: [ 'park' ]
+
+  - name: google videos
+    engine: google_videos
+    shortcut: gov
+    # additional_tests:
+    #   android: *test_android
+    disabled: false
+    tokens: [ 'park' ]
+ 
+  - name: google scholar
+    engine: google_scholar
+    shortcut: gos
+    disabled: false
+    tokens: [ 'park' ]
+
+  - name: ddg definitions
+    engine: duckduckgo_definitions
+    shortcut: ddd
+    weight: 2
+    disabled: true
+   # tests: *tests_infobox
+    disabled: false
+    tokens: [ 'park' ]
+ 
+  - name: docker hub
+    engine: docker_hub
+    shortcut: dh
+    categories: [it, packages]
+    disabled: false
+    tokens: [ 'park' ]
+ 
+  - name: duckduckgo images
+    engine: duckduckgo_images
+    shortcut: ddi
+    timeout: 3.0
+    disabled: true
+    tokens: [ 'park' ]
+
+  - name: duckduckgo weather
+    engine: duckduckgo_weather
+    shortcut: ddw
+    disabled: false
+    tokens: [ 'park' ]    
+
+  - name: qwant news
+    qwant_categ: news
+    engine: qwant
+    shortcut: qwn
+    categories: news
+    disabled: false
+    tokens: [ 'park' ]
+    network: qwant
+
+
+  - name: qwant images
+    qwant_categ: images
+    engine: qwant
+    shortcut: qwi
+    categories: [images, web]
+    disabled: false
+    network: qwant
+    tokens: [ 'park' ]
+ 
+  - name: qwant videos
+    qwant_categ: videos
+    engine: qwant
+    shortcut: qwv
+    categories: [videos, web]
+    disabled: false
+    network: qwant
+    tokens: [ 'park' ]
+ 
+  - name: reddit
+    engine: reddit
+    shortcut: re
+    page_size: 25
+    disabled: false
+    tokens: [ 'park' ]
+
+  - name: wikipedia
+    engine: wikipedia
+    shortcut: wp
+    base_url: 'https://{language}.wikipedia.org/'
+    disabled: false
+    tokens: [ 'park' ]
+
+  - name: wikidata
+    engine: wikidata
+    shortcut: wd
+    timeout: 3.0
+    weight: 2
+    #tests: *tests_infobox    
+    disabled: false
+    tokens: [ 'park' ]
