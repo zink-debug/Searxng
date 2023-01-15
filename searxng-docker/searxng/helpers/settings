@@ -7,7 +7,7 @@ general:
   privacypolicy_url: false
   # use true to use your own donation page written in searx/info/en/donate.md
   # use false to disable the donation link
-  donation_url: false
+  donation_url: https://docs.searxng.org/donate.html
   # mailto:contact@example.com
   contact_url: false
   # record stats
@@ -53,22 +53,22 @@ search:
 server:
   # If you change port, bind_address or base_url don't forget to rebuild
   # instance's environment (make buildenv)
-  #port: 8888
-  #bind_address: "127.0.0.1"
-  #base_url: false  # Possible values: false or "https://example.org/location".
-  limiter: true  # rate limit the number of request on the instance, block some bots
+  port: 8888
+  bind_address: "127.0.0.1"
+  base_url: false  # Possible values: false or "https://example.org/location".
+  limiter: false  # rate limit the number of request on the instance, block some bots
 
   # If your instance owns a /etc/searxng/settings.yml file, then set the following
   # values there.
 
-  secret_key: "c1fd0e7e960a8ab7316f7ce35311818a483f6b2a3cc95841d2bcf2d3a54ce734"  # change this!
+  secret_key: "ultrasecretkey"  # change this!
   # Proxying image results through searx
-  image_proxy: true
+  image_proxy: false
   # 1.0 and 1.1 are supported
-  http_protocol_version: "1.1"
+  http_protocol_version: "1.0"
   # POST queries are more secure as they don't show up in history but may cause
   # problems when using Firefox containers
-  method: "GET"
+  method: "POST"
   default_http_headers:
     X-Content-Type-Options: nosniff
     X-XSS-Protection: 1; mode=block
@@ -78,7 +78,7 @@ server:
 
 redis:
   # https://redis-py.readthedocs.io/en/stable/connections.html#redis.client.Redis.from_url
-  url: redis://redis:6379/0
+  url: false
 
 ui:
   # Custom static path - leave it blank if you didn't change
@@ -87,7 +87,7 @@ ui:
   # Custom templates path - leave it blank if you didn't change
   templates_path: ""
   # query_in_title: When true, the result page's titles contains the query
-  # it decreases the privacy, since the browser can record the page titles.
+  # it decreases the privacy, since the browser can records the page titles.
   query_in_title: false
   # infinite_scroll: When true, automatically loads the next page when scrolling to bottom of the current page.
   infinite_scroll: false
@@ -96,7 +96,7 @@ ui:
   # center the results ?
   center_alignment: false
   # URL prefix of the internet archive, don't forgett trailing slash (if needed).
-  #cache_url: "https://webcache.googleusercontent.com/search?q=cache:"
+  # cache_url: "https://webcache.googleusercontent.com/search?q=cache:"
   # Default interface locale - leave blank to detect from browser information or
   # use codes from the 'locales' config section
   default_locale: ""
@@ -104,7 +104,7 @@ ui:
   # results_on_new_tab: false
   theme_args:
     # style of simple theme: auto, light, dark
-    simple_style: dark
+    simple_style: auto
 
 # Lock arbitrary settings on the preferences page.  To find the ID of the user
 # setting you want to lock, check the ID of the form on the page "preferences".
@@ -132,12 +132,12 @@ ui:
 #
 outgoing:
   # default timeout in seconds, can be override by engine
-  request_timeout: 10.0
+  request_timeout: 3.0
   # the maximum timeout in seconds
-  #max_request_timeout: 3.0
+  # max_request_timeout: 10.0
   # suffix of searx_useragent, could contain information like an email address
   # to the administrator
-  useragent_suffix: "searxng@unikun2.tk"
+  useragent_suffix: ""
   # The maximum number of concurrent connections that may be established.
   pool_connections: 100
   # Allow the connection pool to maintain keep-alive connections below this
@@ -261,13 +261,13 @@ categories_as_tabs:
   general:
   images:
   videos:
-  #news:
-  #map:
-  #music:
-  #it:
-  #science:
-  #files:
-  #social media:
+  news:
+  map:
+  music:
+  it:
+  science:
+  files:
+  social media:
 
 engines:
   - name: 9gag
@@ -296,7 +296,6 @@ engines:
   - name: arch linux wiki
     engine: archlinux
     shortcut: al
-    disabled: true
 
   - name: archive is
     engine: xpath
@@ -321,13 +320,11 @@ engines:
     engine: artic
     shortcut: arc
     timeout: 4.0
-    disabled: true
 
   - name: arxiv
     engine: arxiv
     shortcut: arx
     timeout: 4.0
-    disabled: true
 
   # tmp suspended:  dh key too small
   # - name: base
@@ -338,7 +335,6 @@ engines:
     engine: bandcamp
     shortcut: bc
     categories: music
-    disabled: true
 
   - name: wikipedia
     engine: wikipedia
@@ -353,7 +349,6 @@ engines:
   - name: bing images
     engine: bing_images
     shortcut: bii
-    disabled: true
 
   - name: bing news
     engine: bing_news
@@ -362,7 +357,6 @@ engines:
   - name: bing videos
     engine: bing_videos
     shortcut: biv
-    disabled: false
 
   - name: bitbucket
     engine: xpath
@@ -386,7 +380,6 @@ engines:
   - name: btdigg
     engine: btdigg
     shortcut: bt
-    disabled: true
 
   - name: ccc-tv
     engine: xpath
@@ -413,7 +406,6 @@ engines:
     engine: openverse
     categories: images
     shortcut: opv
-    disabled: true
 
   # - name: core.ac.uk
   #   engine: core
@@ -471,7 +463,6 @@ engines:
     engine: currency_convert
     categories: general
     shortcut: cc
-    disabled: true
 
   - name: deezer
     engine: deezer
@@ -482,7 +473,6 @@ engines:
     engine: deviantart
     shortcut: da
     timeout: 3.0
-    disabled: true
 
   - name: ddg definitions
     engine: duckduckgo_definitions
@@ -502,7 +492,6 @@ engines:
     engine: docker_hub
     shortcut: dh
     categories: [it, packages]
-    disabled: true
 
   - name: erowid
     engine: xpath
@@ -544,17 +533,15 @@ engines:
     timeout: 3.0
     weight: 2
     tests: *tests_infobox
-    disabled: true
 
   - name: duckduckgo
     engine: duckduckgo
     shortcut: ddg
-    disabled: true
 
   - name: duckduckgo images
     engine: duckduckgo_images
     shortcut: ddi
-    #timeout: 3.0
+    timeout: 3.0
     disabled: true
 
   - name: duckduckgo weather
@@ -578,7 +565,6 @@ engines:
     engine: tineye
     shortcut: tin
     timeout: 9.0
-    disabled: true
 
   - name: etymonline
     engine: xpath
@@ -590,7 +576,7 @@ engines:
     first_page_num: 1
     shortcut: et
     categories: [dictionaries]
-    disabled: true
+    disabled: false
     about:
       website: https://www.etymonline.com/
       wikidata_id: Q1188617
@@ -626,7 +612,6 @@ engines:
     # api_key: 'apikey' # required!
     # Or you can use the html non-stable engine, activated by default
     engine: flickr_noapi
-    disabled: true
 
   - name: free software directory
     engine: mediawiki
@@ -661,7 +646,6 @@ engines:
   - name: genius
     engine: genius
     shortcut: gen
-    disabled: true
 
   - name: gigablast
     engine: gigablast
@@ -674,7 +658,6 @@ engines:
   - name: gentoo
     engine: gentoo
     shortcut: ge
-    disabled: true
 
   - name: gitlab
     engine: json_engine
@@ -699,7 +682,6 @@ engines:
   - name: github
     engine: github
     shortcut: gh
-    disabled: true
 
     # This a Gitea service. If you would like to use a different instance,
     # change codeberg.org to URL of the desired Gitea host. Or you can create a
@@ -726,7 +708,7 @@ engines:
     engine: google
     shortcut: go
     # see https://docs.searxng.org/src/searx.engines.google.html#module-searx.engines.google
-    use_mobile_ui: true
+    use_mobile_ui: false
     # additional_tests:
     #   android: *test_android
 
@@ -762,9 +744,8 @@ engines:
   - name: google videos
     engine: google_videos
     shortcut: gov
-    additional_tests:
-       android: *test_android
-    disabled: true
+    # additional_tests:
+    #   android: *test_android
 
   - name: google scholar
     engine: google_scholar
@@ -845,7 +826,6 @@ engines:
     page_size: 20
     categories: [it, packages]
     shortcut: ho
-    disabled: true
     about:
       website: https://hoogle.haskell.org/
       wikidata_id: Q34010
@@ -928,14 +908,12 @@ engines:
     engine: loc
     shortcut: loc
     categories: images
-    disabled: true
 
   - name: lingva
     engine: lingva
     shortcut: lv
     # set lingva instance in url, by default it will use the official instance
     # url: https://lingva.ml
-    disabled: true
 
   - name: lobste.rs
     engine: xpath
@@ -991,7 +969,6 @@ engines:
   - name: mixcloud
     engine: mixcloud
     shortcut: mc
-    disabled: true
 
   # MongoDB engine
   # Required dependency: pymongo
@@ -1074,7 +1051,6 @@ engines:
     title_query: name
     content_query: description
     categories: it
-    disabled: true
     shortcut: man
     about:
       website: https://www.mankier.com/
@@ -1095,7 +1071,6 @@ engines:
     categories: "science"
     shortcut: oad
     timeout: 5.0
-    disabled: true
     about:
       website: https://www.openaire.eu/
       wikidata_id: Q25106053
@@ -1115,7 +1090,6 @@ engines:
     content_html_to_text: true
     categories: science
     shortcut: oap
-    disabled: true
     timeout: 5.0
     about:
       website: https://www.openaire.eu/
@@ -1133,7 +1107,6 @@ engines:
   - name: openstreetmap
     engine: openstreetmap
     shortcut: osm
-    disabled: true
 
   - name: openrepos
     engine: xpath
@@ -1179,12 +1152,10 @@ engines:
     shortcut: pdb
     # Hide obsolete PDB entries.  Default is not to hide obsolete structures
     #  hide_obsolete: false
-    disabled: true
 
   - name: photon
     engine: photon
     shortcut: ph
-    disabled: true
 
   - name: piratebay
     engine: piratebay
@@ -1193,7 +1164,6 @@ engines:
     # country
     url: https://thepiratebay.org/
     timeout: 3.0
-    disabled: true
 
   # Required dependency: psychopg2
   #  - name: postgresql
@@ -1229,7 +1199,6 @@ engines:
     engine: pubmed
     shortcut: pub
     timeout: 3.0
-    disabled: true
 
   - name: pypi
     shortcut: pypi
@@ -1242,7 +1211,6 @@ engines:
     content_xpath: ./p
     suggestion_xpath: /html/body/main/div/div/div/form/div/div[@class="callout-block"]/p/span/a[@class="link"]
     first_page_num: 1
-    disabled: true
     categories: [it, packages]
     about:
       website: https://pypi.org
@@ -1332,7 +1300,6 @@ engines:
   - name: sepiasearch
     engine: sepiasearch
     shortcut: sep
-    disabled: true
 
   - name: soundcloud
     engine: soundcloud
@@ -1343,21 +1310,18 @@ engines:
     shortcut: st
     api_site: 'stackoverflow'
     categories: [it, q&a]
-    disabled: true
 
   - name: askubuntu
     engine: stackexchange
     shortcut: ubuntu
     api_site: 'askubuntu'
     categories: [it, q&a]
-    disabled: true
 
   - name: superuser
     engine: stackexchange
     shortcut: su
     api_site: 'superuser'
     categories: [it, q&a]
-    disabled: true
 
   - name: searchcode code
     engine: searchcode_code
@@ -1426,7 +1390,7 @@ engines:
     engine: solidtorrents
     shortcut: solid
     timeout: 4.0
-    disabled: true
+    disabled: false
     base_url:
       - https://solidtorrents.net
       - https://solidtorrents.eu
@@ -1506,7 +1470,6 @@ engines:
   - name: unsplash
     engine: unsplash
     shortcut: us
-    disabled: true
 
   - name: yahoo
     engine: yahoo
@@ -1527,19 +1490,14 @@ engines:
     #
     # Or you can use the html non-stable engine, activated by default
     engine: youtube_noapi
-    #timeout: 4.0
-    disabled: true
 
   - name: dailymotion
     engine: dailymotion
     shortcut: dm
-    disabled: true
 
   - name: vimeo
     engine: vimeo
     shortcut: vm
-    timeout: 5.0
-    disabled: true
 
   - name: wiby
     engine: json_engine
@@ -1691,18 +1649,16 @@ engines:
     engine: wolframalpha_noapi
     timeout: 6.0
     categories: []
-    disabled: true
 
   - name: dictzone
     engine: dictzone
     shortcut: dc
-    disabled: true
 
   - name: mymemory translated
     engine: translated
     shortcut: tl
     timeout: 5.0
-    disabled: true
+    disabled: false
     # You can use without an API key, but you are limited to 1000 words/day
     # See: https://mymemory.translated.net/doc/usagelimits.php
     # api_key: ''
@@ -1844,7 +1800,7 @@ engines:
     base_url: https://www.wordnik.com/
     categories: [dictionaries]
     timeout: 5.0
-    disabled: true
+    disabled: false
 
   - name: woxikon.de synonyme
     engine: xpath
@@ -1896,7 +1852,6 @@ engines:
     engine: wttr
     shortcut: wttr
     timeout: 9.0
-    disabled: true
 
   - name: brave
     shortcut: brave
